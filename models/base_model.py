@@ -32,7 +32,9 @@ from datetime import datetime
 import uuid
 
 class BaseModel():
-    '''BaseModel class'''
+    '''
+    BaseModel class
+    '''
 
     def __init__(self):
         '''Initializing object...'''
@@ -52,6 +54,12 @@ class BaseModel():
         self.updated_at = datetime.now()
 
     def to_dict(self):
-        pass
+        '''Returns a dictionary'''
 
+        dict_repr = dict()
+        dict_repr = self.__dict__
+        dict_repr['__class__'] = self.__class__.__name__
+        dict_repr['created_at'] = str(self.created_at.isoformat())
+        dict_repr['updated_at'] = str(self.updated_at.isoformat())
 
+        return dict_repr
