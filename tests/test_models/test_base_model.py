@@ -38,3 +38,8 @@ class TestBaseModel(unittest.TestCase):
         '''Testing if to_dict returns a dictionary'''
         obj = BaseModel()
         self.assertIsInstance(obj.to_dict(), dict)
+
+    def test_other_sequence(self):
+        with self.assertRaises(TypeError):
+            arg = [1, 3, 4]
+            obj = BaseModel(**arg)
