@@ -15,21 +15,24 @@ base_model module
     -> to_dict(self): returns a dictionary representation of the created object
                       containing all keys/values of __dict__ of the instance
 
-                      -> an extra key called __class__ is added with the value being the
-                         class name of the object
+                      -> an extra key called __class__ is added with the
+                      value being the class name of the object
 
-                      -> converts "created_at" and  "updated_at" to string object in ISO fromat
+                      -> converts "created_at" and  "updated_at" to
+                      string object in ISO format
 
-                      -> This method will be the first piece of the serialization/deserialization
-                         process
+                      -> This method will be the first piece of the
+                      serialization/deserialization process
 
-                      -> In Summary: the method creates a dictionary representation with
-                                     "simple object type" of our BaseModel class
+                      -> In Summary: the method creates a dictionary
+                      representation with "simple object type"
+                      of our BaseModel class
 '''
 
 
 from datetime import datetime
 import uuid
+
 
 class BaseModel():
     '''
