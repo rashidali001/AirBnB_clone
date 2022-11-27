@@ -1,29 +1,22 @@
 #!/usr/bin/python3
 '''
 base_model module
-
 -> public instance attributes:
     -> id
     -> created_at
     -> updated_at
-
 -> __str__:
     -> Should print: [<class name>] (<self.id>) <self.__dict__>
-
 -> public instance methods:
     -> save(self): updates the attribute "updated_at" with current date time
     -> to_dict(self): returns a dictionary representation of the created object
                       containing all keys/values of __dict__ of the instance
-
                       -> an extra key called __class__ is added with the
                       value being the class name of the object
-
                       -> converts "created_at" and  "updated_at" to
                       string object in ISO format
-
                       -> This method will be the first piece of the
                       serialization/deserialization process
-
                       -> In Summary: the method creates a dictionary
                       representation with "simple object type"
                       of our BaseModel class
@@ -33,7 +26,6 @@ base_model module
 from datetime import datetime
 import uuid
 import json
-from models import storage
 
 
 class BaseModel():
@@ -43,6 +35,7 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         '''Initializing object...'''
+        from models import storage
 
         if len(kwargs) != 0:
             for key, value in kwargs.items():
@@ -65,11 +58,11 @@ class BaseModel():
 
     def __str__(self):
         '''String representation of object'''
-
         return (f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}")
 
     def save(self):
         '''Updates the time object was changed'''
+        from models import storage
 
         self.updated_at = datetime.now()
         self.updated_at = str(self.updated_at.isoformat())
@@ -77,11 +70,9 @@ class BaseModel():
 
     def to_dict(self):
         '''Returns a dictionary'''
-
         dict_repr = dict()
         dict_repr = self.__dict__
         dict_repr['__class__'] = self.__class__.__name__
         dict_repr['created_at'] = str(self.created_at.isoformat())
         dict_repr['updated_at'] = str(self.updated_at.isoformat())
-
         return dict_repr

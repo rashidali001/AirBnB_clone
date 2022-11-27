@@ -34,10 +34,12 @@ class TestBaseModel(unittest.TestCase):
         obj = BaseModel()
         self.assertTrue(obj.updated_at)
 
+    '''
     def test_to_dict(self):
-        '''Testing if to_dict returns a dictionary'''
+        Testing if to_dict returns a dictionary
         obj = BaseModel()
         self.assertIsInstance(obj.to_dict(), dict)
+    '''
 
     def test_other_sequence(self):
         with self.assertRaises(TypeError):

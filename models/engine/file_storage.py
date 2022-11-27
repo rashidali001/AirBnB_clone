@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 '''
 file_storage module
-
 -> private class attribute:
-    -> __file_path: string - path to yhe json file
+    -> __file_path: string - path to the json file
     -> __objects: dictionary - empty but
         will store all objects by <class name>.id
-
 -> public instance methods:
     -> all(self): retuns th dictionary __objects
     -> new(self, obj): sets in __objects the obj with key
@@ -16,10 +14,10 @@ file_storage module
 '''
 
 
-import sys
 import json
 from datetime import datetime
 from os.path import exists
+from models.base_model import BaseModel
 
 
 class FileStorage():
@@ -42,22 +40,20 @@ class FileStorage():
     def save(self):
         '''serializes __objects to the json file'''
 
+        '''
+        First in the loop:
+        we take all the values which we had coverted
+        from dictionaries to objects when loading them
+        in the reload function and converting them
+        back to dictionaries so that we can be able to
+        store them in the file.json
+        '''
+        for key, value in FileStorage.__objects.items():
+            if not isinstance(value, dict):
+                FileStorage.__objects[key] = value.to_dict()
+
         with open(FileStorage.__file_path, 'w') as file:
             json.dump(FileStorage.__objects, file)
-
-            '''
-            Testing new code : if file json file exists,
-            read and write
-            else
-            write
-            file_exist = exists(FileStorage.__file_path)
-        if file_exist == True:
-            with open(FileStorage.__file_path, 'r+') as file:
-                json.dump(FileStorage.__objects, file, indent=2)
-        else:
-            with open(FileStorage.__file_path, 'w') as file:
-                json.dump(FileStorage.__objects, file, indent=2)
-                '''
 
     def reload(self):
         '''Deserializes the json file to __objects'''
@@ -65,3 +61,5 @@ class FileStorage():
         if file_exist is True:
             with open(FileStorage.__file_path, 'r') as file:
                 FileStorage.__objects = json.load(file)
+                for key, value in FileStorage.__objects.items():
+                    FileStorage.__objects[key] = BaseModel(**value)

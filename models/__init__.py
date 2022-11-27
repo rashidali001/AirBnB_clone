@@ -4,7 +4,7 @@ init model: makes directories be treated as packages
 '''
 
 
-from engine.file_storage import FileStorage
+from models.engine.file_storage import FileStorage
 
 
 # creating a File Storage instance
