@@ -10,13 +10,26 @@ from models.base_model import BaseModel
 from models import storage
 from models.engine.file_storage import FileStorage
 from models.user import User
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
+from models.state import State
 
 
 class HBNBCommand(cmd.Cmd):
     ''' Implementing the HBNBCommand class'''
 
     prompt = '(hbnb) '
-    __class_names = {'BaseModel': BaseModel, 'User': User}
+    __class_names = {
+        'BaseModel': BaseModel,
+        'User': User,
+        'Place': Place,
+        'City': City,
+        'Amenity': Amenity,
+        'Review': Review,
+        'State': State
+    }
 
     def do_create(self, arg):
         '''Creates a new Instance of a specified file.
