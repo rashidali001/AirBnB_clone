@@ -9,13 +9,14 @@ import cmd
 from models.base_model import BaseModel
 from models import storage
 from models.engine.file_storage import FileStorage
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
     ''' Implementing the HBNBCommand class'''
 
     prompt = '(hbnb) '
-    __class_names = {'BaseModel': BaseModel}
+    __class_names = {'BaseModel': BaseModel, 'User': User}
 
     def do_create(self, arg):
         '''Creates a new Instance of a specified file.
@@ -164,13 +165,17 @@ class HBNBCommand(cmd.Cmd):
             return False
 
         for key, value in all_objects.items():
+            name, id = key.split(".")
             if key == obj_to_find:
                 dict_repr = value.to_dict()
                 # using strip to remove the double quotation marks
                 dict_repr.update({arg[2]: arg[3].strip('\"')})
-                obj_update = BaseModel(**dict_repr)
-                all_objects[key] = obj_update
-                storage.save()
+                for class_name, class_value in \
+                        HBNBCommand.__class_names.items():
+                    if name == class_name:
+                        obj_update = class_value(**dict_repr)
+                        all_objects[key] = obj_update
+                        storage.save()
 
     def do_quit(self, arg):
         '''Quit command to exit program'''

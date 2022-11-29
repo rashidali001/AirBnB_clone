@@ -18,6 +18,7 @@ import json
 from datetime import datetime
 from os.path import exists
 from models.base_model import BaseModel
+from  models.user import User
 
 
 class FileStorage():
@@ -26,6 +27,7 @@ class FileStorage():
     # private class attributes
     __file_path = "file.json"
     __objects = dict()
+    __clases_names = { "BaseModel": BaseModel, "User": User}
 
     def all(self):
         '''Returns the dictionary __object'''
@@ -62,4 +64,8 @@ class FileStorage():
             with open(FileStorage.__file_path, 'r') as file:
                 FileStorage.__objects = json.load(file)
                 for key, value in FileStorage.__objects.items():
-                    FileStorage.__objects[key] = BaseModel(**value)
+                    name, id = key.split(".")
+                    for class_name, class_value in FileStorage.__clases_names.items():
+                        if name == class_name:
+                            FileStorage.__objects[key] = class_value(**value)
+
