@@ -18,7 +18,12 @@ import json
 from datetime import datetime
 from os.path import exists
 from models.base_model import BaseModel
-from  models.user import User
+from models.user import User
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
+from models.state import State
 
 
 class FileStorage():
@@ -27,7 +32,15 @@ class FileStorage():
     # private class attributes
     __file_path = "file.json"
     __objects = dict()
-    __clases_names = { "BaseModel": BaseModel, "User": User}
+    __clases_names = {
+        'BaseModel': BaseModel,
+        'User': User,
+        'Place': Place,
+        'City': City,
+        'Amenity': Amenity,
+        'Review': Review,
+        'State': State
+    }
 
     def all(self):
         '''Returns the dictionary __object'''
