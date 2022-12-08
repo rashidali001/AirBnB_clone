@@ -26,9 +26,11 @@ div.locations, div.amenities{
     height: 100%;
     float: left;
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    align-items: left;
+    text-align: left;
+    padding-left: 30px;
 }
 div.locations{
     border-right: 1px solid #DDDDDD;
