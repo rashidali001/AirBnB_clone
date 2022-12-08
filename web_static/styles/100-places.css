@@ -36,7 +36,7 @@ div.price_by_night{
     font-size: 30px;
     position: absolute;
     top: 20px;
-    right: 20px;
+    right: 10px;
 }
 div.price_by_night > p{
     color: #FF5A5F;
