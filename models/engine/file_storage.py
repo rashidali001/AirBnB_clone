@@ -5,6 +5,11 @@
 
 
 import json
+from models.base_model import BaseModel
+
+models = {
+    "BaseModel":BaseModel
+}
 
 
 class FileStorage():
@@ -25,17 +30,26 @@ class FileStorage():
         """ Sets in __objects the obj with key 
             <classname>.id
         """
-
-        key = f"{obj.__class__.__name__}.{obj.id}"
+        if "obj_is_new" in obj:
+            del obj["obj_is_new"]
+        class_name = ""
+        object_id = ""
+        for key in obj:
+            if key == "__class__":
+                class_name = obj[key]
+            if key == "id":
+                object_id = obj[key]
+        key = f"{class_name}.{object_id}"
         self.__objects[key] = obj
 
     
     def save(self):
         """Serializes __objects into __file_path
         """
-
+        
         with open(self.__file_path, "w") as file_storage:
             json.dump(self.__objects, file_storage)
+
     
     def reload(self):
         """Deserializes JSON file to __objects.
@@ -45,6 +59,8 @@ class FileStorage():
         try:
             with open(self.__file_path, "r") as file_storage:
                 self.__objects = json.load(file_storage)
+                for key in self.__objects:
+                    self.__objects[key] = BaseModel(self.__objects[key])
         except:
             pass
 

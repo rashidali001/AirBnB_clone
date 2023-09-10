@@ -1,1 +1,2 @@
+-e git+https://github.com/rashidali001/AirBnB_clone.git@f51f32ac1cb0b6f9ba9f4ea2c364592b8df844a2#egg=airbnb
 pycodestyle==2.11.0

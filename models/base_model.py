@@ -8,8 +8,12 @@ from datetime import datetime
 import uuid
 
 
+
+
 class BaseModel():
     """ Creating attributes and methods for the parent class """
+
+    obj_is_new = bool()
 
     def __init__(self, *args, **kwargs):
         
@@ -18,6 +22,9 @@ class BaseModel():
             for key, value in kwargs.items():
                 if key  == "__class__":
                     continue
+                if key  == "obj_is_new":
+                    continue
+
 
                 # Converting date strings to date objects
 
@@ -35,11 +42,11 @@ class BaseModel():
             
         else:
             """ Default initialization process """
-            from models import storage
+            self.obj_is_new = True
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
+        
         
         
 
@@ -51,11 +58,11 @@ class BaseModel():
     def save(self):
         """ updates the time to the current one when changes are made """
         from models import storage
-        self.updated_at = datetime.now()
+        if (self.obj_is_new):
+            storage.new(self.to_dict())
         storage.save()
 
 
-    
 
     def to_dict(self):
         """ Returning a dictionary containing all
