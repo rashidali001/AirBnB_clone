@@ -21,7 +21,9 @@ class FileStorage():
 
 
     def all(self):
-        """ Returns __objects """
+        """ Returns __objects 
+            syntax {"<classname>.<object.id>:{self.__dict__}"}
+        """
         
         return self.__objects
     
@@ -63,15 +65,9 @@ class FileStorage():
         try:
             with open(self.__file_path, "r") as file_storage:
                 self.__objects = json.load(file_storage)
-                print(self.__objects)
-                print("Printing self.__objects above")
-                for key in self.__objects:
-                    print(self.__objects[key])
+                for key in self.__objects:                   
                     self.__objects[key] = BaseModel(self.__objects[key])
-                    print("In reload function\n\n")
-                    print("--------------------")
-                    print(self.__objects[key])
-                print(self.__objects)
+                   
         except:
             pass
 

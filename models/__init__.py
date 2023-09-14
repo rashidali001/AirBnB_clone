@@ -3,8 +3,9 @@
 #!/usr/bin/python3
 
 
-from engine.file_storage import FileStorage
-from models.base_model import BaseModel
+from .engine.file_storage import FileStorage
+
+
 
 obj_is_new = False
 storage = FileStorage()

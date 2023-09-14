@@ -1,10 +1,10 @@
 AUTHORS
 README.md
 setup.py
-airbnb.egg-info/PKG-INFO
-airbnb.egg-info/SOURCES.txt
-airbnb.egg-info/dependency_links.txt
-airbnb.egg-info/top_level.txt
+airbnb_project.egg-info/PKG-INFO
+airbnb_project.egg-info/SOURCES.txt
+airbnb_project.egg-info/dependency_links.txt
+airbnb_project.egg-info/top_level.txt
 models/__init__.py
 models/base_model.py
 models/test.py
