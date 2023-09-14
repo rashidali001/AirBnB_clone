@@ -30,8 +30,6 @@ class FileStorage():
         """ Sets in __objects the obj with key 
             <classname>.id
         """
-        if "obj_is_new" in obj:
-            del obj["obj_is_new"]
         class_name = ""
         object_id = ""
         for key in obj:
@@ -46,7 +44,13 @@ class FileStorage():
     def save(self):
         """Serializes __objects into __file_path
         """
-        
+
+        # Changes any object value -> to_dict()
+        for key in self.__objects:
+            if not isinstance(self.__objects[key], dict):
+                self.__objects[key] = self.__objects[key].to_dict()
+    
+
         with open(self.__file_path, "w") as file_storage:
             json.dump(self.__objects, file_storage)
 
@@ -59,8 +63,15 @@ class FileStorage():
         try:
             with open(self.__file_path, "r") as file_storage:
                 self.__objects = json.load(file_storage)
+                print(self.__objects)
+                print("Printing self.__objects above")
                 for key in self.__objects:
+                    print(self.__objects[key])
                     self.__objects[key] = BaseModel(self.__objects[key])
+                    print("In reload function\n\n")
+                    print("--------------------")
+                    print(self.__objects[key])
+                print(self.__objects)
         except:
             pass
 

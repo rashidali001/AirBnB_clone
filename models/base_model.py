@@ -8,21 +8,18 @@ from datetime import datetime
 import uuid
 
 
-
+obj_is_new = False
 
 class BaseModel():
     """ Creating attributes and methods for the parent class """
 
-    obj_is_new = bool()
-
     def __init__(self, *args, **kwargs):
         
         if kwargs.__len__() != 0:
+            print("here")
             """ Initialization of dict objects is kwargs is not empty"""
             for key, value in kwargs.items():
                 if key  == "__class__":
-                    continue
-                if key  == "obj_is_new":
                     continue
 
 
@@ -42,7 +39,8 @@ class BaseModel():
             
         else:
             """ Default initialization process """
-            self.obj_is_new = True
+            global obj_is_new
+            obj_is_new = True
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
@@ -58,7 +56,8 @@ class BaseModel():
     def save(self):
         """ updates the time to the current one when changes are made """
         from models import storage
-        if (self.obj_is_new):
+        global obj_is_new
+        if (obj_is_new):
             storage.new(self.to_dict())
         storage.save()
 
