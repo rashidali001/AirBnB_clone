@@ -170,6 +170,11 @@ class HBNBCommand(cmd.Cmd):
     
 
     def do_update(self,line):
+        """Updates an instance based on the class name and id by adding or
+           updating attribute (save the change into the JSON file).
+           Usage:
+           update <class name> <id> <attribute name> "<attribute value>"
+        """
         args = line.split()
 
         if len(args) == 0:
@@ -189,6 +194,8 @@ class HBNBCommand(cmd.Cmd):
         arg_id = args[1]
         all_objects = storage.all()
         class_objects_id = list()
+
+
         for key in all_objects:
             split_values = key.split(".")
             class_name, object_id = split_values
@@ -208,27 +215,28 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
         
-        attribute = args[2]
+        attribute_name = args[2]
         attribute_value = args[3]
+
         if args[3][0] == "'" or args[3][0] == '"':
             attribute_value = args[3][1:-1]
+
         
-
-
-
-    
-
-
-
-
-
-
-
-
-            
-
-
-
+        for key in all_objects:
+            split_values = key.split(".")
+            class_name, object_id = split_values
+            class_name = class_name.lower()
+            if class_name_arg == class_name:
+                if arg_id == object_id:
+                    obj = all_objects[key]
+                    setattr(obj, attribute_name, attribute_value)
+                    obj.updated()
+                    all_objects[key] = obj        
+        
+        storage.__objects = all_objects
+        storage.save()
+        storage.reload()                   
+                                 
 
     def do_quit(self, line):
         """ Exits the program """

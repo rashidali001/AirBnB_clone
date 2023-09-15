@@ -60,6 +60,9 @@ class BaseModel():
         if (obj_is_new):
             storage.new(self.to_dict())
         storage.save()
+    
+    def updated(self):
+        self.updated_at = datetime.now()
 
 
 
