@@ -21,7 +21,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         """creates a new instance of a model class
-            syntax: create <class name>
+            Usage: create <class name>
         """
         args = line.split()
         if len(args) == 0:
@@ -41,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, line):
         """Prints a string representative of an instance
            based on classname & id
-           syntax:
+           Usage:
            show <classname> 
            or
            show <classname> <object id>
@@ -90,7 +90,7 @@ class HBNBCommand(cmd.Cmd):
     
     def do_destroy(self, line):
         """Deletes an instance based on the specified class name
-           syntax:
+           Usage:
            destroy <classname> <object id>
         """
         args = line.split()
@@ -127,6 +127,10 @@ class HBNBCommand(cmd.Cmd):
         print("** no instance found **")
     
     def do_all(self, line):
+        """Prints all string representation of all instances
+           based or not on the class name
+           Usage: all / all <classname>
+        """
         result = list()
         args = line.split()
 
@@ -163,6 +167,58 @@ class HBNBCommand(cmd.Cmd):
                     result.append(f"[{obj.__class__.__name__}] ({obj.id}) {obj.__dict__}")
         
         print(result)
+    
+
+    def do_update(self,line):
+        args = line.split()
+
+        if len(args) == 0:
+            print("** class name missing **")
+            return
+        
+        class_name_arg = args[0].lower()
+
+        if not class_name_arg in Models:
+            print("** class doesn't exist **")
+            return
+        
+        if len(args) == 1:
+            print("** instance id missing **")
+            return
+        
+        arg_id = args[1]
+        all_objects = storage.all()
+        class_objects_id = list()
+        for key in all_objects:
+            split_values = key.split(".")
+            class_name, object_id = split_values
+            class_name = class_name.lower()
+            if class_name_arg == class_name:
+                class_objects_id.append(object_id)
+        
+        if not arg_id in class_objects_id:
+            print("** no instance found **")
+            return
+        
+        if len(args) == 2:
+            print("** attribute name missing **")
+            return
+
+        if len(args) == 3:
+            print("** value missing **")
+            return
+        
+        attribute = args[2]
+        attribute_value = args[3]
+        if args[3][0] == "'" or args[3][0] == '"':
+            attribute_value = args[3][1:-1]
+        
+
+
+
+    
+
+
 
 
 
