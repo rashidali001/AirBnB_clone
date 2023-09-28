@@ -6,9 +6,11 @@
 
 import json
 from models.base_model import BaseModel
+from models.user import User
 
 models = {
-    "BaseModel":BaseModel
+    "BaseModel":BaseModel,
+    "User":User
 }
 
 
@@ -66,7 +68,7 @@ class FileStorage():
             with open(self.__file_path, "r") as file_storage:
                 self.__objects = json.load(file_storage)
                 for key in self.__objects:                   
-                    self.__objects[key] = BaseModel(self.__objects[key])
+                    self.__objects[key] = BaseModel(**self.__objects[key])
                    
         except:
             pass

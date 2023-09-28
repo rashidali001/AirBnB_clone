@@ -8,15 +8,14 @@ from datetime import datetime
 import uuid
 
 
+
 obj_is_new = False
 
 class BaseModel():
     """ Creating attributes and methods for the parent class """
 
-    def __init__(self, *args, **kwargs):
-        
-        if kwargs.__len__() != 0:
-            print("here")
+    def __init__(self, *args, **kwargs):        
+        if kwargs.__len__() != 0:           
             """ Initialization of dict objects is kwargs is not empty"""
             for key, value in kwargs.items():
                 if key  == "__class__":
@@ -25,15 +24,17 @@ class BaseModel():
 
                 # Converting date strings to date objects
 
-                if key == "created_at":
+
+                if (key == "created_at")and not isinstance(value, datetime):
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                     setattr(self, key, value)
                     continue
 
-                if key == "updated_at":
+                if (key == "updated_at") and not isinstance(value, datetime):
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                     setattr(self, key, value)
                     continue
+                
 
                 setattr(self, key, value)
             

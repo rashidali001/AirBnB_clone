@@ -3,12 +3,14 @@
 #!/usr/bin/python3
 
 
-import cmd
+import cmd, datetime
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 Models = {
-    "basemodel" : BaseModel
+    "basemodel" : BaseModel,
+    "user":User
 }
 
 
@@ -89,7 +91,7 @@ class HBNBCommand(cmd.Cmd):
 
     
     def do_destroy(self, line):
-        """Deletes an instance based on the specified class name
+        """Deletes an instance based on the specified class name and object id
            Usage:
            destroy <classname> <object id>
         """
@@ -119,7 +121,7 @@ class HBNBCommand(cmd.Cmd):
                 split_values = key.split(".")
                 class_name, object_id = split_values
                 if arg_id == object_id:
-                    all_objects.pop(key)                   
+                    all_objects.pop(key) # Destroying the object specified   
                     storage.__objects = all_objects
                     storage.save()
                     return
@@ -136,6 +138,11 @@ class HBNBCommand(cmd.Cmd):
 
 
         all_objects = storage.all()
+        
+        if len(args) > 1:
+            print(" ** Invalid syantax **")
+            print(" ** Usage: all / all <classname> **")
+            return
 
         if len(args) == 1:
             class_name_arg = args[0].lower()
@@ -163,7 +170,7 @@ class HBNBCommand(cmd.Cmd):
             class_name = class_name.lower()
             for model_name in Models:
                 if class_name == model_name:
-                    obj = Models[model_name](all_objects[key])
+                    obj = Models[model_name](all_objects[key]) # suppose to be **all_objects[key]
                     result.append(f"[{obj.__class__.__name__}] ({obj.id}) {obj.__dict__}")
         
         print(result)
@@ -176,6 +183,7 @@ class HBNBCommand(cmd.Cmd):
            update <class name> <id> <attribute name> "<attribute value>"
         """
         args = line.split()
+        updated_object = None
 
         if len(args) == 0:
             print("** class name missing **")
@@ -222,6 +230,33 @@ class HBNBCommand(cmd.Cmd):
             attribute_value = args[3][1:-1]
 
         
+
+        for key in Models:
+            if key == class_name_arg:
+                for key_a, value_a in all_objects.items():
+                    split_values = key_a.split(".")
+                    class_name, object_id = split_values
+                    class_name = class_name.lower()
+                    if class_name == class_name_arg:
+                        if object_id == arg_id:
+                            print(value_a.__dict__)
+                            print(type(value_a.__dict__["created_at"]))
+                            print(type(value_a.__dict__["updated_at"]))
+                            obj = Models[key](**value_a.__dict__)
+                            print(obj)
+                            setattr(obj, attribute_name, attribute_value)
+                            obj.updated()
+                            updated_object = obj
+        
+        for key in all_objects:
+            split_values = key.split(".")
+            class_name, object_id = split_values
+            class_name = class_name.lower()
+            if class_name == class_name_arg:
+                if object_id == arg_id:
+                    all_objects[key] = updated_object
+        
+        """
         for key in all_objects:
             split_values = key.split(".")
             class_name, object_id = split_values
@@ -231,12 +266,16 @@ class HBNBCommand(cmd.Cmd):
                     obj = all_objects[key]
                     setattr(obj, attribute_name, attribute_value)
                     obj.updated()
-                    all_objects[key] = obj        
+                    all_objects[key] = obj   
+        """     
         
         storage.__objects = all_objects
         storage.save()
         storage.reload()                   
-                                 
+    
+    def do_reload(self, line):
+        storage.reload()
+        all_objects = storage.all()
 
     def do_quit(self, line):
         """ Exits the program """
