@@ -170,7 +170,7 @@ class HBNBCommand(cmd.Cmd):
             class_name = class_name.lower()
             for model_name in Models:
                 if class_name == model_name:
-                    obj = Models[model_name](all_objects[key]) # suppose to be **all_objects[key]
+                    obj = Models[model_name](**all_objects[key]) # suppose to be **all_objects[key]
                     result.append(f"[{obj.__class__.__name__}] ({obj.id}) {obj.__dict__}")
         
         print(result)

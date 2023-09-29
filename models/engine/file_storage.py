@@ -67,8 +67,13 @@ class FileStorage():
         try:
             with open(self.__file_path, "r") as file_storage:
                 self.__objects = json.load(file_storage)
-                for key in self.__objects:                   
-                    self.__objects[key] = BaseModel(**self.__objects[key])
+                for key in self.__objects:
+                    split_values = key.split(".")
+                    class_name, object_id  = split_values 
+                    for model in models:
+                        if model == class_name:
+                            self.__objects[key] = models[key](**self.__objects[key])                
+                    # self.__objects[key] = BaseModel(**self.__objects[key])
                    
         except:
             pass
