@@ -239,11 +239,7 @@ class HBNBCommand(cmd.Cmd):
                     class_name = class_name.lower()
                     if class_name == class_name_arg:
                         if object_id == arg_id:
-                            print(value_a.__dict__)
-                            print(type(value_a.__dict__["created_at"]))
-                            print(type(value_a.__dict__["updated_at"]))
-                            obj = Models[key](**value_a.__dict__)
-                            print(obj)
+                            obj = Models[key](**value_a)
                             setattr(obj, attribute_name, attribute_value)
                             obj.updated()
                             updated_object = obj
@@ -272,10 +268,12 @@ class HBNBCommand(cmd.Cmd):
         storage.__objects = all_objects
         storage.save()
         storage.reload()                   
-    
+        
+    """
     def do_reload(self, line):
         storage.reload()
         all_objects = storage.all()
+    """
 
     def do_quit(self, line):
         """ Exits the program """
