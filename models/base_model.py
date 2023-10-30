@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """ BaseModel class creation responsible of initialization
     serialization and deserialization of future instances
 """

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of f06bc9b (Airbnb_clone)
 """File_storage - handles saving of the object instances,
     serialization and deseralization of saved instances
 """
