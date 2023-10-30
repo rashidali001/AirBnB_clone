@@ -3,9 +3,10 @@
 #!/usr/bin/python3
 
 
-from models import base_model
+from models.base_model import BaseModel
 
-class State(base_model):
-    """One public class: name (str)
+class State(BaseModel):
+    """One public atrribute:
+        + name (str)
     """
     name = ""

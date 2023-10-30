@@ -6,11 +6,21 @@
 import cmd, datetime
 from models.base_model import BaseModel
 from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models import storage
 
 Models = {
     "basemodel" : BaseModel,
-    "user":User
+    "user":User,
+    "amenity":Amenity,
+    "city":City,
+    "place":Place,
+    "review":Review,
+    "state":State
 }
 
 
@@ -35,6 +45,24 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         
+
+        count = 1
+        while (count < len(args)):     
+            
+        
+            split_values = args[count].split("=")
+            bf_equals, af_equals = split_values
+
+            if '"' in af_equals:
+                value = af_equals.strip('"')
+                if '_' in value:
+                    value = value.replace('_', ' ')
+                
+
+
+
+
+
         new_object = Models[model_name]()
         new_object.save()
         print (f"{new_object.__class__.__name__} {new_object.id}")      
@@ -70,7 +98,11 @@ class HBNBCommand(cmd.Cmd):
                 """
                 split_values = key.split(".")
                 class_name, object_id = split_values
-                print(f"{class_name} {object_id}")
+                class_name_lower = class_name.lower()
+                if class_name_lower == model_name:
+                    print(f"{class_name} {object_id}")
+
+                
             return
         
         if len(args) == 2:
@@ -156,8 +188,9 @@ class HBNBCommand(cmd.Cmd):
                 class_name_o = class_name_o.lower()
                 for key_m, value_m in Models.items():
                     if key_m == class_name_arg:
-                        obj = value_m(value_o)
-                        result.append(f"[{obj.__class__.__name__}] ({obj.id}) {obj.__dict__}")
+                        if class_name_o == class_name_arg:
+                             obj = value_m(**value_o)
+                             result.append(f"[{obj.__class__.__name__}] ({obj.id}) {obj.__dict__}")
             
             print(result)
             return                             
@@ -275,6 +308,112 @@ class HBNBCommand(cmd.Cmd):
         all_objects = storage.all()
     """
 
+    def default(self, line):
+        args = line.split(".")
+        arg1 = args[0].lower() # arg1 - classname
+        if arg1 in Models:
+            arg2 = args[1].split("(")[0] # arg2 - method / property
+            if arg2 == "all":
+                HBNBCommand.do_all(self, arg1)
+
+            if arg2 == "count":
+                count = 0
+                all_objects = storage.all()
+                for key in all_objects:
+                    split_values = key.split(".")
+                    class_name, object_rep = split_values
+                    if class_name.lower() == arg1:
+                        count += 1
+                print(count)
+                return
+            
+            if arg2 == "show":
+               id = args[1].split('"')[1]
+               all_objects = storage.all()
+               for key, value in all_objects.items():
+                   split_values = key.split(".")
+                   class_name, object_id = split_values
+                   if object_id == id:
+                       for key in Models:
+                           if key == class_name.lower():
+                                obj = Models[key](**value)
+                                print(obj)
+                                return
+               print("** no instance found **")
+
+            if arg2 == "destroy":
+                id = args[1].split('"')[1]
+                all_objects = storage.all()
+                for key in all_objects.keys():
+                    """Spliting BaseModel.12567 into
+                        arg1 = BaseModel
+                        arg2 = 12567
+                    """
+                    split_values = key.split(".")
+                    class_name, object_id = split_values
+                    if id == object_id:
+                        all_objects.pop(key) # Destroying the object specified   
+                        storage.__objects = all_objects
+                        storage.save()
+                        return
+                    
+                print("** no instance found **")
+            
+            if arg2 == "update":
+                id = args[1].split('"')[1]
+                # Ex: arguments - # ['"f26bc3d7-75c2-4c01-b974-056c01a35227"', ' "first_name"', ' "john"']
+                # Ex: arguments - # ['"f26bc3d7-75c2-4c01-b974-056c01a35227"', {'first_name':"Betty"}]
+                arguments = args[1][6:].strip("()").split(",") 
+                property_arg = arguments[1].strip(" ").strip('"')
+                value_arg = arguments[2].strip(" ")
+                if '"' not in value_arg:
+                    value_arg = int(value_arg) 
+                
+                if type(value_arg) == str:
+                    value_arg = value_arg.strip('"')
+                
+                if "{" in arguments[1]:
+                    print("Dictionaries are not applicable at the moment")
+                    return
+
+                all_objects = storage.all()
+                for key, value in all_objects.items():
+                    split_values = key.split(".")
+                    class_name, object_id = split_values
+                    class_name = class_name.lower()
+                    if id == object_id:
+                        for model in Models:
+                            if model == arg1:
+                                obj = Models[model](**value)
+                                setattr(obj, property_arg, value_arg)
+                                obj.updated()
+                                all_objects[key] = obj
+                                storage.__objects = all_objects
+                                storage.save()
+                                storage.reload()       
+                                return                 
+
+                print("** no instance found **")   
+
+
+
+                
+               
+                
+                                   
+                
+                    
+                    
+                       
+                       
+
+            
+                
+                
+            
+
+        
+
     def do_quit(self, line):
         """ Exits the program """
         return True
@@ -287,6 +426,12 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """ Empty line? Pass (Do nothing) """
         pass
+    """
+    Testing purposes
+    """
+    def do_testCreate(self, arg):
+            
+      pass
 
 
 

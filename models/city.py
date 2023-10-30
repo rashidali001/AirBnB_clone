@@ -3,10 +3,10 @@
 #!/usr/bin/python3
 
 
-from models import base_model
+from models.base_model import BaseModel
 
 
-class City(base_model):
+class City(BaseModel):
     """Two public attributes:
         + state_id (str)
         + name (str)

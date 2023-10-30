@@ -3,10 +3,10 @@
 #!/usr/bin/python3
 
 
-from models import base_model
+from models.base_model import BaseModel
 
 
-class Review(base_model):
+class Review(BaseModel):
     """Three public attributes:
         + place_id (str)
         + user_id (str)

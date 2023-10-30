@@ -3,11 +3,11 @@
 #!/usr/bin/python3
 
 
-from models import base_model
+from models.base_model import BaseModel
 
 
-class Place(base_model):
-    """11 public attributes:
+class Place(BaseModel):
+    """Eleven public attributes:
         + city_id (str)
         + user_id (str)
         + name (str)

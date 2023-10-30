@@ -3,10 +3,10 @@
 #!/usr/bin/python3
 
 
-from models import base_model
+from models.base_model import BaseModel
 
 
-class Amenity(base_model):
+class Amenity(BaseModel):
     """One public attributes:
         + name (str)
     """
