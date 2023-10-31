@@ -102,3 +102,11 @@ class BaseModel():
 
         return obj_dict
     
+
+    def delete(self):
+        from models import storage
+
+        for key in storage.keys():
+            if key == self.__class__.__name__:
+                storage.pop(key)
+                
