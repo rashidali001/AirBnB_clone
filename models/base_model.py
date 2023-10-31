@@ -5,7 +5,14 @@
 
 
 from datetime import datetime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime
 import uuid
+import sqlalchemy
+
+
+Base = declarative_base()
+
 
 
 
@@ -42,9 +49,21 @@ class BaseModel():
             """ Default initialization process """
             global obj_is_new
             obj_is_new = True
+            """
+            Before Sql-alchemy
+            """
+            '''
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            '''
+
+            """
+            After Sql-alchmey
+            """
+            self.id = Column(Integer, primary_key=True, nullable=False)
+            self.created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+            self.updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
         
         
         
@@ -76,6 +95,10 @@ class BaseModel():
         # Converting the date objects to string
         obj_dict["created_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f") 
         obj_dict["updated_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+
+        for key in obj_dict.keys():
+            if key == "_sa_instance_state":
+                obj_dict.pop(key)
 
         return obj_dict
     

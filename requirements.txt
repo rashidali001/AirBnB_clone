@@ -1,2 +1,6 @@
--e git+https://github.com/rashidali001/AirBnB_clone.git@f51f32ac1cb0b6f9ba9f4ea2c364592b8df844a2#egg=airbnb
+-e git+https://github.com/rashidali001/AirBnB_clone.git@35be1d6618fcbb21f88a8d161f29f20055c19633#egg=airbnb
+-e git+https://github.com/rashidali001/AirBnB_clone.git@35be1d6618fcbb21f88a8d161f29f20055c19633#egg=airbnb_project
+greenlet==3.0.1
 pycodestyle==2.11.0
+SQLAlchemy==2.0.22
+typing_extensions==4.8.0

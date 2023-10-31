@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of f06bc9b (Airbnb_clone)
 """File_storage - handles saving of the object instances,
     serialization and deseralization of saved instances
 """
@@ -37,11 +33,20 @@ class FileStorage():
     __objects = dict()
 
 
-    def all(self):
+    def all(self, cls=None):
         """ Returns __objects 
             syntax {"<classname>.<object.id>:{self.__dict__}"}
         """
-        
+
+        if cls is not None:
+            filtered = dict()
+            for key in self.__objects:
+                class_name, object_id = key.split(".")
+                if class_name == cls:
+                    filtered[key]  = self.__objects[key]
+                
+            return filtered
+                
         return self.__objects
     
     
@@ -92,5 +97,16 @@ class FileStorage():
                    
         except:
             pass
+    
+    def delete(self, obj=None):
+        if obj is None:
+            return 
+        
+        for key in self.__objects:
+            class_name, object_id = key.split(".")
+            if object_id == obj.id:
+                self.__objects.pop(key)
+        
+    
 
 
